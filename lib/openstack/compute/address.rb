@@ -7,7 +7,7 @@ module Compute
       if index.class == Symbol then
         self.each do |address|
           if address.label == index.to_s then
-            addresses << address.address
+            addresses << address
           end
         end
         addresses
