@@ -28,7 +28,6 @@ module Compute
     def initialize(connection,id)
       @id = id
       @connection = connection
-      @metadata  = OpenStack::Compute::ImageMetadata.new(connection, id)
       populate
     end
     
@@ -38,7 +37,8 @@ module Compute
     #   >> image.populate
     #   => true
     def populate
-      response = @connection.csreq("GET",@connection.svrmgmthost,"#{@connection.svrmgmtpath}/images/#{URI.escape(self.id.to_s)}",@connection.svrmgmtport,@connection.svrmgmtscheme)
+      path = "#{@connection.s    vrmgmtpath}/images/#{URI.escape(self.id.to_s)}"
+      response = @connection.csreq("GET",@connection.svrmgmthost,path,@connection.svrmgmtport,@connection.svrmgmtscheme)
       OpenStack::Compute::Exception.raise_exception(response) unless response.code.match(/^20.$/)
       data = JSON.parse(response.body)['image']
       @id = data['id']
@@ -48,6 +48,7 @@ module Compute
          @updated = DateTime.parse(data['updated'])
       end
       @created = DateTime.parse(data['created'])
+      @metadata = Openstack::Compute::Metadata.new(@connection, path, data['metadata'])
       @status = data['status']
       @minDisk = data['minDisk']
       @minRam = data['minRam']

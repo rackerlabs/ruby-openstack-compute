@@ -1,51 +1,98 @@
 module OpenStack
 module Compute
 
-  class AbstractMetadata
+  class Metadata
 
-    def initialize(connection, server_id)
+    def initialize(connection, parent_url, metadata=nil)
       @connection = connection
-      @server_id  = server_id
+      @base_url = "#{parent_url}/metadata"
+      @metadata = metadata
     end
 
-    def get_item(key)
-      response = @connection.req('GET', "#{@base_url}/#{key}")
-      return JSON.parse(response.body)['meta'][key]
+    def [](key)
+      refresh if @metadata.nil?
+      @metadata[key]
     end
 
-    def set_item(key, value)
-      json = JSON.generate(:meta => { key => value })
-      @connection.req('PUT', "#{@base_url}/#{key}", :data => json)
+    def []=(key, value)
+      @metadata = {} if @metadata.nil?
+      @metadata[key] = value
     end
 
-    def delete_item(key)
-      @connection.req('DELETE', "#{@base_url}/#{key}")
+    def each
+      refresh if @metadata.nil?
+      @metadata.each
     end
 
-    def get_data()
-      response = @connection.req('GET', @base_url)
-      return JSON.parse(response.body)['metadata']
+    def save
+      return if @metadata.nil?
+      json = JSON.generate(:metadata => @metadata)
+      response = @connection.req('PUT', @base_url, :data => json)
+      @metadata = JSON.parse(response.body)['metadata']
     end
 
-    def set_data(data = {})
-      json = JSON.generate(:metadata => data)
-      @connection.req('POST', @base_url, :data => json)
+    def update(keys=nil)
+      return if @metadata.nil?
+      if keys.nil?
+        json = JSON.generate(:metadata => @metadata)
+        response = @connection.req('POST', @base_url, :data => json)
+        @metadata = JSON.parse(response.body)['metadata']
+      else
+        keys.each { |key|
+          next if not @metadata.has_key?(key)
+          json = JSON.generate(:meta => { key => @metadata[key] })
+          @connection.req('PUT', "#{@base_url}/#{key}", :data => json)
+        }
+      end
     end
 
-  end
-
-  class ServerMetadata < AbstractMetadata
-    def initialize(connection, server_id)
-      super(connection, server_id)
-      @base_url = "/servers/#{@server_id}/metadata"
+    def refresh(keys=nil)
+      if keys.nil?
+        response = @connection.req('GET', @base_url)
+        @metadata = JSON.parse(response.body)['metadata']
+      else
+        @metadata = {} if @metadata == nil
+        keys.each { |key|
+          response = @connection.req('GET', "#{@base_url}/#{key}")
+          next if response.code == "404"
+          meta = JSON.parse(response.body)['meta']
+          meta.each { |k, v| @metadata[k] = v }
+        }
+      end
     end
-  end
 
-  class ImageMetadata < AbstractMetadata
-    def initialize(connection, server_id)
-      super(connection, server_id)
-      @base_url = "/images/#{@server_id}/metadata"
+    def delete(keys)
+      return if @metadata.nil?
+      keys.each { |key|
+        @metadata.delete(key)
+      }
     end
+
+    def delete!(keys)
+      keys.each { |key|
+        @connection.req('DELETE', "#{@base_url}/#{key}")
+        @metadata.delete(key) if not @metadata.nil?
+      }
+    end
+
+    def clear
+      if @metadata.nil?
+        @metadata = {}
+      else
+        @metadata.clear
+      end
+    end
+
+    def clear!
+      clear
+      save
+    end
+
+    def has_key?(key)
+      return False if @metadata.nil?
+      return @metadata.has_key?(key)
+    end
+
   end
 
 end
