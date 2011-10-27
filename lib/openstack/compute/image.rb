@@ -37,8 +37,8 @@ module Compute
     #   >> image.populate
     #   => true
     def populate
-      path = "#{@connection.s    vrmgmtpath}/images/#{URI.escape(self.id.to_s)}"
-      response = @connection.csreq("GET",@connection.svrmgmthost,path,@connection.svrmgmtport,@connection.svrmgmtscheme)
+      path = "images/#{URI.escape(self.id.to_s)}"
+      response = @connection.req("GET", path)
       OpenStack::Compute::Exception.raise_exception(response) unless response.code.match(/^20.$/)
       data = JSON.parse(response.body)['image']
       @id = data['id']
