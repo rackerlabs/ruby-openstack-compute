@@ -34,6 +34,7 @@ module Compute
   require 'compute/flavor'
   require 'compute/exception'
   require 'compute/address'
+  require 'compute/personalities'
   
   # Constants that set limits on server creation
   MAX_PERSONALITY_ITEMS = 5
