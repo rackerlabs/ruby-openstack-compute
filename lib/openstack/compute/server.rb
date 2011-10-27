@@ -45,10 +45,12 @@ module Compute
     #
     #  >> server.refresh
     #  => true
-    def populate
-      response = @connection.csreq("GET",@svrmgmthost,"#{@svrmgmtpath}/servers/#{URI.encode(@id.to_s)}",@svrmgmtport,@svrmgmtscheme)
-      OpenStack::Compute::Exception.raise_exception(response) unless response.code.match(/^20.$/)
-      data = JSON.parse(response.body)["server"]
+    def populate(data=nil)
+      if data.nil? then
+          response = @connection.csreq("GET",@svrmgmthost,"#{@svrmgmtpath}/servers/#{URI.encode(@id.to_s)}",@svrmgmtport,@svrmgmtscheme)
+          OpenStack::Compute::Exception.raise_exception(response) unless response.code.match(/^20.$/)
+          data = JSON.parse(response.body)["server"]
+      end
       @id        = data["id"]
       @name      = data["name"]
       @status    = data["status"]
@@ -145,9 +147,13 @@ module Compute
     #   >> server.rebuild!
     #   => true
     def rebuild!(options)
+      options[:personality] = Personalities.get_personality(options[:personality])
       json = JSON.generate(:rebuild => options)
-      @connection.req('POST', "/servers/#{@id}/action", :data => json)
-      self.populate
+      response = @connection.req('POST', "/servers/#{@id}/action", :data => json)
+      OpenStack::Compute::Exception.raise_exception(response) unless response.code.match(/^20.$/)
+      data = JSON.parse(response.body)['server']
+      self.populate(data)
+      self.adminPass = data['adminPass']
       true
     end
     
