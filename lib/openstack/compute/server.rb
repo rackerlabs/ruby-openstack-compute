@@ -46,7 +46,8 @@ module Compute
     #  >> server.refresh
     #  => true
     def populate
-      response = @connection.csreq("GET",@svrmgmthost,"#{@svrmgmtpath}/servers/#{URI.encode(@id.to_s)}",@svrmgmtport,@svrmgmtscheme)
+      path = "servers/#{URI.encode(@id.to_s)}"
+      response = @connection.req("GET", path)
       OpenStack::Compute::Exception.raise_exception(response) unless response.code.match(/^20.$/)
       data = JSON.parse(response.body)["server"]
       @id        = data["id"]
@@ -54,7 +55,7 @@ module Compute
       @status    = data["status"]
       @progress  = data["progress"]
       @addresses = get_addresses(data["addresses"])
-      @metadata  = OpenStack::Compute::ServerMetadata.new(@connection, @id)
+      @metadata  = OpenStack::Compute::Metadata.new(@connection, path, data["metadata"])
       @hostId    = data["hostId"]
       @image   = data["image"]
       @flavor  = data["flavor"]
