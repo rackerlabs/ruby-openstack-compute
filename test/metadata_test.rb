@@ -23,6 +23,13 @@ class MetadataTest < Test::Unit::TestCase
     assert_equal(nil, metadata['key0'])
   end
 
+  def test_metadata_presents_stored_values
+    metadata = OpenStack::Compute::Metadata.new(@conn, 'blah')
+    metadata.store('key3', 'value3')
+    assert_equal('value3', metadata['key3'])
+    assert_equal(nil, metadata['key0'])
+  end
+
   def test_metadata_looks_up_values_if_none_provided
     data = {'metadata' => {'key4' => 'value4'}}
     json = JSON.generate(data)
@@ -170,6 +177,15 @@ class MetadataTest < Test::Unit::TestCase
     assert(metadata['key1'].nil?)
     assert_equal('value2', metadata['key2'])
     assert(metadata['key3'].nil?)
+  end
+
+  def test_each_pair
+    conn = mock()
+    data = {'key1' => 'value1', 'key2' => 'value2', 'key3' => 'value3'}
+    metadata = OpenStack::Compute::Metadata.new(conn, 'blah', data)
+    metadata.each_pair do |k,v|
+        assert_equal v, data[k]
+    end
   end
   
 end

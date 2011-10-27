@@ -19,6 +19,18 @@ module Compute
       @metadata[key] = value
     end
 
+    def store(key, value)
+      @metadata = {} if @metadata.nil?
+      @metadata[key] = value
+    end
+
+    def each_pair
+      @metadata = {} if @metadata.nil?
+      @metadata.each_pair do |k,v|
+          yield k, v
+      end
+    end
+
     def each
       refresh if @metadata.nil?
       @metadata.each

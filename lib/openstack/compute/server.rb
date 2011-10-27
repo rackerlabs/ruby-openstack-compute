@@ -46,7 +46,7 @@ module Compute
     #  >> server.refresh
     #  => true
     def populate
-      path = "servers/#{URI.encode(@id.to_s)}"
+      path = "/servers/#{URI.encode(@id.to_s)}"
       response = @connection.req("GET", path)
       OpenStack::Compute::Exception.raise_exception(response) unless response.code.match(/^20.$/)
       data = JSON.parse(response.body)["server"]
