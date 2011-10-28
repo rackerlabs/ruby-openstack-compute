@@ -167,10 +167,10 @@ module Compute
     # The image is saved as a backup, of which there are only three available slots.  If there are no backup slots available, 
     # A OpenStack::Compute::Exception::OpenStackComputeFault will be raised.
     #
-    #   >> image = server.create_image("My Rails Server")
+    #   >> image = server.create_image(:name => "My Rails Server")
     #   => 
-    def create_image(name)
-      data = JSON.generate(:createImage => {:name => name})
+    def create_image(options)
+      data = JSON.generate(:createImage => options)
       response = @connection.csreq("POST",@svrmgmthost,"#{@svrmgmtpath}/servers/#{URI.encode(self.id.to_s)}/action",@svrmgmtport,@svrmgmtscheme,{'content-type' => 'application/json'},data)
       OpenStack::Compute::Exception.raise_exception(response) unless response.code.match(/^20.$/)
       image_id = response["Location"].scan(/.*\/(.*)/).flatten
