@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{openstack-compute}
-  s.version = "1.1.1"
+  s.version = "1.1.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Dan Prince"]
-  s.date = %q{2011-10-14}
+  s.date = %q{2011-10-28}
   s.description = %q{API Binding for OpenStack Compute}
   s.email = %q{dan.prince@rackspace.com}
   s.extra_rdoc_files = [
@@ -20,12 +20,14 @@ Gem::Specification.new do |s|
     "README.rdoc",
     "VERSION",
     "lib/openstack/compute.rb",
+    "lib/openstack/compute/address.rb",
     "lib/openstack/compute/authentication.rb",
     "lib/openstack/compute/connection.rb",
     "lib/openstack/compute/exception.rb",
     "lib/openstack/compute/flavor.rb",
     "lib/openstack/compute/image.rb",
     "lib/openstack/compute/metadata.rb",
+    "lib/openstack/compute/personalities.rb",
     "lib/openstack/compute/server.rb"
   ]
   s.homepage = %q{https://launchpad.net/ruby-openstack-compute}
