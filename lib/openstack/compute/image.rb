@@ -48,7 +48,7 @@ module Compute
          @updated = DateTime.parse(data['updated'])
       end
       @created = DateTime.parse(data['created'])
-      @metadata = Openstack::Compute::Metadata.new(@connection, path, data['metadata'])
+      @metadata = OpenStack::Compute::Metadata.new(@connection, path, data['metadata'])
       @status = data['status']
       @minDisk = data['minDisk']
       @minRam = data['minRam']
