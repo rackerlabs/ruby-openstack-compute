@@ -31,6 +31,11 @@ module Compute
       end
     end
 
+    def size
+      @metadata = {} if @metadata.nil?
+      @metadata.size
+    end
+
     def each
       refresh if @metadata.nil?
       @metadata.each
