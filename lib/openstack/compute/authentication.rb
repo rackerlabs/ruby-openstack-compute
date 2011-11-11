@@ -58,8 +58,6 @@ module Compute
             connection.svrmgmtport = uri.port
             connection.svrmgmtscheme = uri.scheme
             connection.authok = true
-          else
-            connection.authok = false
           end
         end
       else
