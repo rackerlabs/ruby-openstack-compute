@@ -6,6 +6,7 @@ module Compute
     attr_reader :name
     attr_reader :ram
     attr_reader :disk
+    attr_reader :vcpus
 
     # This class provides an object for the "Flavor" of a server.  The Flavor can generally be taken as the server specification,
     # providing information on things like memory and disk space.
@@ -26,6 +27,7 @@ module Compute
       @name = data['name']
       @ram  = data['ram']
       @disk = data['disk']
+      @vcpus = data['vcpus']
     end
     
   end
