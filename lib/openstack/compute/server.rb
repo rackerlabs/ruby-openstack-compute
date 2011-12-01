@@ -15,6 +15,8 @@ module Compute
     attr_reader   :image
     attr_reader   :flavor
     attr_reader   :metadata
+    attr_reader   :created
+    attr_reader   :updated
     attr_accessor :adminPass
     
     # This class is the representation of a single Server object.  The constructor finds the server identified by the specified
@@ -61,9 +63,37 @@ module Compute
       @hostId    = data["hostId"]
       @image   = data["image"]
       @flavor  = data["flavor"]
+      @created = data["created"]
+      @updated = data["updated"]
       true
     end
     alias :refresh :populate
+    
+    # Sends an API request to suspend this server.
+    #
+    # Returns true if the API call succeeds.
+    #
+    #   >> server.suspend
+    #   => true
+    def suspend
+      data = JSON.generate(:suspend => nil)
+      response = @connection.csreq("POST",@svrmgmthost,"#{@svrmgmtpath}/servers/#{URI.encode(self.id.to_s)}/action",@svrmgmtport,@svrmgmtscheme,{'content-type' => 'application/json'},data)
+      OpenStack::Compute::Exception.raise_exception(response) unless response.code.match(/^20.$/)
+      true
+    end
+    
+    # Sends an API request to resume this server.
+    #
+    # Returns true if the API call succeeds.
+    #
+    #   >> server.suspend
+    #   => true
+    def resume
+      data = JSON.generate(:resume => nil)
+      response = @connection.csreq("POST",@svrmgmthost,"#{@svrmgmtpath}/servers/#{URI.encode(self.id.to_s)}/action",@svrmgmtport,@svrmgmtscheme,{'content-type' => 'application/json'},data)
+      OpenStack::Compute::Exception.raise_exception(response) unless response.code.match(/^20.$/)
+      true
+    end
     
     # Sends an API request to reboot this server.  Takes an optional argument for the type of reboot, which can be "SOFT" (graceful shutdown)
     # or "HARD" (power cycle).  The hard reboot is also triggered by server.reboot!, so that may be a better way to call it.
