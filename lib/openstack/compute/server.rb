@@ -63,8 +63,8 @@ module Compute
       @hostId    = data["hostId"]
       @image   = data["image"]
       @flavor  = data["flavor"]
-      @created = data["created"]
-      @updated = data["updated"]
+      @created = DateTime.strptime(data["created"]).to_time
+      @updated = DateTime.strptime(data["updated"]).to_time
       true
     end
     alias :refresh :populate
