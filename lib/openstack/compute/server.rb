@@ -77,7 +77,7 @@ module Compute
     #   => true
     def suspend
       data = JSON.generate(:suspend => nil)
-      response = @connection.csreq("POST",@svrmgmthost,"#{@svrmgmtpath}/servers/#{URI.encode(self.id.to_s)}/action",@svrmgmtport,@svrmgmtscheme,{'content-type' => 'application/json'},data)
+      response = @connection.req('POST', "/servers/#{@id}/action", :data => data)
       OpenStack::Compute::Exception.raise_exception(response) unless response.code.match(/^20.$/)
       true
     end
@@ -90,7 +90,7 @@ module Compute
     #   => true
     def resume
       data = JSON.generate(:resume => nil)
-      response = @connection.csreq("POST",@svrmgmthost,"#{@svrmgmtpath}/servers/#{URI.encode(self.id.to_s)}/action",@svrmgmtport,@svrmgmtscheme,{'content-type' => 'application/json'},data)
+      response = @connection.req('POST', "/servers/#{@id}/action", :data => data)
       OpenStack::Compute::Exception.raise_exception(response) unless response.code.match(/^20.$/)
       true
     end
@@ -104,7 +104,7 @@ module Compute
     #   => true
     def reboot(type="SOFT")
       data = JSON.generate(:reboot => {:type => type})
-      response = @connection.csreq("POST",@svrmgmthost,"#{@svrmgmtpath}/servers/#{URI.encode(self.id.to_s)}/action",@svrmgmtport,@svrmgmtscheme,{'content-type' => 'application/json'},data)
+      response = @connection.req('POST', "/servers/#{@id}/action", :data => data)
       OpenStack::Compute::Exception.raise_exception(response) unless response.code.match(/^20.$/)
       true
     end
@@ -131,7 +131,7 @@ module Compute
     #   => "MyServer"
     def update(options)
       data = JSON.generate(:server => options)
-      response = @connection.csreq("PUT",@svrmgmthost,"#{@svrmgmtpath}/servers/#{URI.encode(self.id.to_s)}",@svrmgmtport,@svrmgmtscheme,{'content-type' => 'application/json'},data)
+      response = @connection.req('PUT', "/servers/#{@id}", :data => data)
       OpenStack::Compute::Exception.raise_exception(response) unless response.code.match(/^20.$/)
       # If we rename the instance, repopulate the object
       self.populate if options[:name]
@@ -145,7 +145,7 @@ module Compute
     #   >> server.delete!
     #   => true
     def delete!
-      response = @connection.csreq("DELETE",@svrmgmthost,"#{@svrmgmtpath}/servers/#{URI.encode(self.id.to_s)}",@svrmgmtport,@svrmgmtscheme)
+      response = @connection.req('DELETE', "/servers/#{@id}")
       OpenStack::Compute::Exception.raise_exception(response) unless response.code.match(/^20.$/)
       true
     end
@@ -201,7 +201,7 @@ module Compute
     #   => 
     def create_image(options)
       data = JSON.generate(:createImage => options)
-      response = @connection.csreq("POST",@svrmgmthost,"#{@svrmgmtpath}/servers/#{URI.encode(self.id.to_s)}/action",@svrmgmtport,@svrmgmtscheme,{'content-type' => 'application/json'},data)
+      response = @connection.req('POST', "/servers/#{@id}/action", :data => data)
       OpenStack::Compute::Exception.raise_exception(response) unless response.code.match(/^20.$/)
       image_id = response["Location"].scan(/.*\/(.*)/).flatten
       OpenStack::Compute::Image.new(@connection, image_id)
@@ -216,7 +216,7 @@ module Compute
     #   => true
     def resize!(flavorRef)
       data = JSON.generate(:resize => {:flavorRef => flavorRef})
-      response = @connection.csreq("POST",@svrmgmthost,"#{@svrmgmtpath}/servers/#{URI.encode(self.id.to_s)}/action",@svrmgmtport,@svrmgmtscheme,{'content-type' => 'application/json'},data)
+      response = @connection.req('POST', "/servers/#{@id}/action", :data => data)
       OpenStack::Compute::Exception.raise_exception(response) unless response.code.match(/^20.$/)
       self.populate
       true
@@ -231,7 +231,7 @@ module Compute
     def confirm_resize!
       # If the resize bug gets figured out, should put a check here to make sure that it's in the proper state for this.
       data = JSON.generate(:confirmResize => nil)
-      response = @connection.csreq("POST",@svrmgmthost,"#{@svrmgmtpath}/servers/#{URI.encode(self.id.to_s)}/action",@svrmgmtport,@svrmgmtscheme,{'content-type' => 'application/json'},data)
+      response = @connection.req('POST', "/servers/#{@id}/action", :data => data)
       OpenStack::Compute::Exception.raise_exception(response) unless response.code.match(/^20.$/)
       self.populate
       true
@@ -247,7 +247,7 @@ module Compute
     def revert_resize!
       # If the resize bug gets figured out, should put a check here to make sure that it's in the proper state for this.
       data = JSON.generate(:revertResize => nil)
-      response = @connection.csreq("POST",@svrmgmthost,"#{@svrmgmtpath}/servers/#{URI.encode(self.id.to_s)}/action",@svrmgmtport,@svrmgmtscheme,{'content-type' => 'application/json'},data)
+      response = @connection.req('POST', "/servers/#{@id}/action", :data => data)
       OpenStack::Compute::Exception.raise_exception(response) unless response.code.match(/^20.$/)
       self.populate
       true
