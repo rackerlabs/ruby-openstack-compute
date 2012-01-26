@@ -55,6 +55,7 @@ module Compute
         response = @connection.req('POST', @base_url, :data => json)
         @metadata = JSON.parse(response.body)['metadata']
       else
+        keys = [keys] unless keys.is_a? Array
         keys.each { |key|
           next if not @metadata.has_key?(key)
           json = JSON.generate(:meta => { key => @metadata[key] })
@@ -69,6 +70,7 @@ module Compute
         @metadata = JSON.parse(response.body)['metadata']
       else
         @metadata = {} if @metadata == nil
+        keys = [keys] unless keys.is_a? Array
         keys.each { |key|
           response = @connection.req('GET', "#{@base_url}/#{key}")
           next if response.code == "404"
@@ -80,12 +82,14 @@ module Compute
 
     def delete(keys)
       return if @metadata.nil?
+      keys = [keys] unless keys.is_a? Array
       keys.each { |key|
         @metadata.delete(key)
       }
     end
 
     def delete!(keys)
+      keys = [keys] unless keys.is_a? Array
       keys.each { |key|
         @connection.req('DELETE', "#{@base_url}/#{key}")
         @metadata.delete(key) if not @metadata.nil?
