@@ -12,20 +12,16 @@ See the class definitions for documentation on specific methods and operations.
 
   require 'openstack/compute'
 
-  cs = OpenStack::Compute::Connection.new(:username => USERNAME, :api_key => API_KEY, :auth_url => API_URL)	
+  cs = OpenStack::Compute::Connection.new(:username => USERNAME, :api_key => API_KEY, :authtenant => TENANT, :auth_url => API_URL)	
 
   # Get a listing of all current servers
   >> cs.servers
-  => [{:name=>"RenamedRubyTest", :id=>110917}]
+  => [{:name=>"Server1", :id=>110917}]
 
   # Access a specific server
   >> server = cs.server(110917)
   >> server.name
-  => "RenamedRubyTest"
-
-  # or...
-  server_manager.find(110917)
-  
+  => "Server1"
 
   # See what type of server this is
   >> server.flavor.name

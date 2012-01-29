@@ -1,3 +1,6 @@
+* Sun Jan 29 2012 Dan Prince <dan.prince@rackspace.com> - 1.1.6
+  - Fixes issue where tenant name wasn't added to auth requests.
+
 * Fri Nov 11 2011 Dan Prince <dan.prince@rackspace.com> - 1.1.5
   - Update v2.0 keystone auth to handle case where multiple services are
     returned via the service catalog (compute, images, etc.)

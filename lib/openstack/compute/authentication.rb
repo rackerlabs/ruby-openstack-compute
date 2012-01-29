@@ -32,7 +32,7 @@ module Compute
         raise OpenStack::Compute::Exception::Connection, "Unable to connect to #{server}"
       end
 
-      auth_data = JSON.generate({ "auth" =>  { "passwordCredentials" => { "username" => connection.authuser, "password" => connection.authkey }}})
+      auth_data = JSON.generate({ "auth" =>  { "passwordCredentials" => { "username" => connection.authuser, "password" => connection.authkey }, "tenantName" => connection.authtenant}})
       response = server.post(connection.auth_path.chomp("/")+"/tokens", auth_data, {'Content-Type' => 'application/json'})
       if (response.code =~ /^20./)
         resp_data=JSON.parse(response.body)
