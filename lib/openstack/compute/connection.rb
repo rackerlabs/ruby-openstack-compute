@@ -15,7 +15,8 @@ module Compute
     attr_reader   :auth_port
     attr_reader   :auth_scheme
     attr_reader   :auth_path
-    attr_accessor :service_name
+    attr_reader   :service_name
+    attr_reader   :service_type
     attr_reader   :proxy_host
     attr_reader   :proxy_port
     attr_reader   :region
