@@ -38,12 +38,12 @@ module Compute
         resp_data=JSON.parse(response.body)
         connection.authtoken = resp_data['access']['token']['id']
         resp_data['access']['serviceCatalog'].each do |service|
-          if service['type'] == connection.service_name
+          if service['name'] == connection.service_name
             uri = String.new
             endpoints = service["endpoints"]
             if connection.region
               endpoints.each do |ep|
-                if ep["region"].upcase == connection.region.upcase
+                if ep["region"] and ep["region"].upcase == connection.region.upcase
                   uri = URI.parse(ep["publicURL"])
                 end
               end
