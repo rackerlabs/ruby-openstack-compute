@@ -7,6 +7,7 @@ module Compute
     # If it succeeds, it sets the svrmgmthost, svrmgtpath, svrmgmtport,
     # svrmgmtscheme, authtoken, and authok variables on the connection.
     # If it fails, it raises an exception.
+    
     def self.init(conn)
       if conn.auth_path =~ /.*v2.0\/?$/
         AuthV20.new(conn)
@@ -19,6 +20,7 @@ module Compute
 
   private
   class AuthV20
+    attr_reader :uri
     
     def initialize(connection)
       begin
@@ -31,6 +33,8 @@ module Compute
       rescue
         raise OpenStack::Compute::Exception::Connection, "Unable to connect to #{server}"
       end
+      
+      @uri = String.new
 
       auth_data = JSON.generate({ "auth" =>  { "passwordCredentials" => { "username" => connection.authuser, "password" => connection.authkey }, "tenantName" => connection.authtenant}})
       response = server.post(connection.auth_path.chomp("/")+"/tokens", auth_data, {'Content-Type' => 'application/json'})
@@ -38,26 +42,31 @@ module Compute
         resp_data=JSON.parse(response.body)
         connection.authtoken = resp_data['access']['token']['id']
         resp_data['access']['serviceCatalog'].each do |service|
-          if service['name'] == connection.service_name
-            uri = String.new
+          if connection.service_name
+            check_service_name = connection.service_name
+          else
+            check_service_name = service['name']
+          end
+          if service['type'] == connection.service_type and service['name'] == check_service_name
             endpoints = service["endpoints"]
             if connection.region
               endpoints.each do |ep|
                 if ep["region"] and ep["region"].upcase == connection.region.upcase
-                  uri = URI.parse(ep["publicURL"])
+                  @uri = URI.parse(ep["publicURL"])
                 end
               end
-              if uri == ''
-                raise OpenStack::Compute::Exception::Authentication, "No API endpoint for region #{connection.region}"
-              end
             else
-              uri = URI.parse(endpoints[0]["publicURL"])
+              @uri = URI.parse(endpoints[0]["publicURL"])
             end
-            connection.svrmgmthost = uri.host
-            connection.svrmgmtpath = uri.path
-            connection.svrmgmtport = uri.port
-            connection.svrmgmtscheme = uri.scheme
-            connection.authok = true
+            if @uri == ""
+              raise OpenStack::Compute::Exception::Authentication, "No API endpoint for region #{connection.region}"
+            else
+              connection.svrmgmthost = @uri.host
+              connection.svrmgmtpath = @uri.path
+              connection.svrmgmtport = @uri.port
+              connection.svrmgmtscheme = @uri.scheme
+              connection.authok = true
+            end
           end
         end
       else

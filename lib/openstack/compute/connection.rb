@@ -28,7 +28,8 @@ module Compute
     #   :tenant - Your Openstack tenant *required*. Defaults to username.
     #   :api_key - Your Openstack API key *required*
     #   :auth_url - Configurable auth_url endpoint.
-    #   :service_name - (Optional for v2.0 auth only). The name of the compute service to use. Defaults to 'compute'.
+    #   :service_name - (Optional for v2.0 auth only). The optional name of the compute service to use.
+    #   :service_type - (Optional for v2.0 auth only). Defaults to "compute"
     #   :region - (Optional for v2.0 auth only). The specific service region to use. Defaults to first returned region.
     #   :retry_auth - Whether to retry if your auth token expires (defaults to true)
     #   :proxy_host - If you need to connect through a proxy, supply the hostname here
@@ -40,7 +41,8 @@ module Compute
       @authkey = options[:api_key] || (raise Exception::MissingArgument, "Must supply an :api_key")
       @auth_url = options[:auth_url] || (raise Exception::MissingArgument, "Must supply an :auth_url")
       @authtenant = options[:authtenant] || @authuser
-      @service_name = options[:service_name] || "compute"
+      @service_name = options[:service_name] || nil
+      @service_type = options[:service_type] || "compute"
       @region = options[:region] || @region = nil
       @is_debug = options[:is_debug]
 
