@@ -97,9 +97,6 @@ module Compute
         uri = URI.parse(response["x-server-management-url"])
         connection.svrmgmthost = uri.host
         connection.svrmgmtpath = uri.path
-        # Force the path into the v1.1 URL space
-        connection.svrmgmtpath.sub!(/\/.*\/?/, '/v1.1/')
-        connection.svrmgmtpath += connection.authtenant
         connection.svrmgmtport = uri.port
         connection.svrmgmtscheme = uri.scheme
         connection.authok = true
