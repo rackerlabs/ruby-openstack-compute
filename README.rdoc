@@ -61,7 +61,7 @@ See the class definitions for documentation on specific methods and operations.
 
 == Authors
 
-By Dan Prince <dan.prince@rackspace.com>, Naveed Massjouni <naveedm9@gmail.com>
+By Dan Prince <dprince@redhat.com>, Naveed Massjouni <naveedm9@gmail.com>
 
 Based on the Rackspace Cloud Servers Ruby API.
 

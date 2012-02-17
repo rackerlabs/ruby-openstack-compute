@@ -1,3 +1,7 @@
+* Sun Feb 16 2012 Dan Prince <dprince@redhat.com> - 1.1.7
+  - For v1.0 auth use x-server-management-url as path.
+  - Fix filtering endpoints by service_name and service type.
+
 * Sun Jan 29 2012 Dan Prince <dan.prince@rackspace.com> - 1.1.6
   - Fixes issue where tenant name wasn't added to auth requests.
 
