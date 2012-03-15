@@ -5,6 +5,7 @@ module Compute
     attr_reader   :authuser
     attr_reader   :authtenant
     attr_reader   :authkey
+    attr_reader   :auth_method
     attr_accessor :authtoken
     attr_accessor :authok
     attr_accessor :svrmgmthost
@@ -42,6 +43,7 @@ module Compute
       @authkey = options[:api_key] || (raise Exception::MissingArgument, "Must supply an :api_key")
       @auth_url = options[:auth_url] || (raise Exception::MissingArgument, "Must supply an :auth_url")
       @authtenant = options[:authtenant] || @authuser
+      @auth_method = options[:auth_method] || "password"
       @service_name = options[:service_name] || nil
       @service_type = options[:service_type] || "compute"
       @region = options[:region] || @region = nil

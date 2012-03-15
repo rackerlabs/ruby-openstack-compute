@@ -36,7 +36,14 @@ module Compute
       
       @uri = String.new
 
-      auth_data = JSON.generate({ "auth" =>  { "passwordCredentials" => { "username" => connection.authuser, "password" => connection.authkey }, "tenantName" => connection.authtenant}})
+      if connection.auth_method == "password"
+        auth_data = JSON.generate({ "auth" =>  { "passwordCredentials" => { "username" => connection.authuser, "password" => connection.authkey }, "tenantName" => connection.authtenant}})
+      elsif connection.auth_method == "rax-kskey"
+        auth_data = JSON.generate({"auth" => {"RAX-KSKEY:apiKeyCredentials" => {"username" => connection.authuser, "apiKey" => connection.authkey}}})
+      else
+        raise Exception::InvalidArgument, "Unrecognized auth method #{connection.auth_method}"
+      end
+
       response = server.post(connection.auth_path.chomp("/")+"/tokens", auth_data, {'Content-Type' => 'application/json'})
       if (response.code =~ /^20./)
         resp_data=JSON.parse(response.body)
