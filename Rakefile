@@ -1,16 +1,16 @@
 require 'rubygems'
-require './lib/openstack/compute.rb'
+require './lib/openstack.rb'
 require 'rake/testtask'
 
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gemspec|
-    gemspec.name = "openstack-compute"
-    gemspec.summary = "OpenStack Compute Ruby API"
-    gemspec.description = "API Binding for OpenStack Compute"
-    gemspec.email = "dan.prince@rackspace.com"
+    gemspec.name = "openstack"
+    gemspec.summary = "OpenStack Ruby API"
+    gemspec.description = "API Binding for OpenStack"
+    gemspec.email = ["dprince@redhat.com","marios@redhat.com"]
     gemspec.homepage = "https://launchpad.net/ruby-openstack-compute"
-    gemspec.authors = ["Dan Prince"]
+    gemspec.authors = ["Dan Prince", "Marios Andreou"]
     gemspec.add_dependency 'json'
     gemspec.files = Dir.glob('lib/**/*.rb')
     gemspec.files << "README.rdoc"
