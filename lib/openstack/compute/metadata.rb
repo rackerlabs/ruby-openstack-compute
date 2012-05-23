@@ -3,8 +3,8 @@ module Compute
 
   class Metadata
 
-    def initialize(connection, parent_url, metadata=nil)
-      @connection = connection
+    def initialize(compute, parent_url, metadata=nil)
+      @compute = compute
       @base_url = "#{parent_url}/metadata"
       @metadata = metadata
     end
@@ -44,7 +44,7 @@ module Compute
     def save
       return if @metadata.nil?
       json = JSON.generate(:metadata => @metadata)
-      response = @connection.req('PUT', @base_url, :data => json)
+      response = @compute.connection.req('PUT', @base_url, :data => json)
       @metadata = JSON.parse(response.body)['metadata']
     end
 
@@ -52,25 +52,25 @@ module Compute
       return if @metadata.nil?
       if keys.nil?
         json = JSON.generate(:metadata => @metadata)
-        response = @connection.req('POST', @base_url, :data => json)
+        response = @compute.connection.req('POST', @base_url, :data => json)
         @metadata = JSON.parse(response.body)['metadata']
       else
         keys.each { |key|
           next if not @metadata.has_key?(key)
           json = JSON.generate(:meta => { key => @metadata[key] })
-          @connection.req('PUT', "#{@base_url}/#{key}", :data => json)
+          @compute.connection.req('PUT', "#{@base_url}/#{key}", :data => json)
         }
       end
     end
 
     def refresh(keys=nil)
       if keys.nil?
-        response = @connection.req('GET', @base_url)
+        response = @compute.connection.req('GET', @base_url)
         @metadata = JSON.parse(response.body)['metadata']
       else
         @metadata = {} if @metadata == nil
         keys.each { |key|
-          response = @connection.req('GET', "#{@base_url}/#{key}")
+          response = @compute.connection.req('GET', "#{@base_url}/#{key}")
           next if response.code == "404"
           meta = JSON.parse(response.body)['meta']
           meta.each { |k, v| @metadata[k] = v }
@@ -87,7 +87,7 @@ module Compute
 
     def delete!(keys)
       keys.each { |key|
-        @connection.req('DELETE', "#{@base_url}/#{key}")
+        @compute.connection.req('DELETE', "#{@base_url}/#{key}")
         @metadata.delete(key) if not @metadata.nil?
       }
     end
