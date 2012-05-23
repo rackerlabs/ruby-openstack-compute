@@ -181,7 +181,8 @@ See the class definitions for documentation on specific methods and operations.
 
 By Dan Prince <dprince@redhat.com>, Naveed Massjouni <naveedm9@gmail.com>, Marios Andreou <marios@redhat.com>
 
-Based on the Rackspace Cloud Servers and Rackspace Cloud Files Ruby API.
+Initial code checkin on May 23rd 2012 - code refactored from and based on the Rackspace Cloud Servers gem
+(https://github.com/rackspace/ruby-openstack-compute) and Rackspace Cloud Files gem (https://github.com/rackspace/ruby-cloudfiles).
 
 == License
 

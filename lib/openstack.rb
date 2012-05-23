@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #
-# == Ruby OpenStack Compute API
+# == Ruby OpenStack API
 #
 # See COPYING for license information.
 # ----

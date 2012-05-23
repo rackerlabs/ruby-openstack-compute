@@ -1,3 +1,7 @@
+#Initial version of this code is based on and refactored from the rackspace/ruby-cloudfiles repo
+#@ https://github.com/rackspace/ruby-cloudfiles - Copyright (c) 2011, Rackspace US, Inc.
+# See COPYING for license information
+#
 module OpenStack
 module Swift
   class StorageObject

@@ -1,13 +1,2 @@
-* Fri Mar 16 2012 Dan Prince <dprince@redhat.com> - 1.1.8
-  - Add auth_method option with support for 'password' and 'rax-kskey'
-
-* Sun Feb 16 2012 Dan Prince <dprince@redhat.com> - 1.1.7
-  - For v1.0 auth use x-server-management-url as path.
-  - Fix filtering endpoints by service_name and service type.
-
-* Sun Jan 29 2012 Dan Prince <dan.prince@rackspace.com> - 1.1.6
-  - Fixes issue where tenant name wasn't added to auth requests.
-
-* Fri Nov 11 2011 Dan Prince <dan.prince@rackspace.com> - 1.1.5
-  - Update v2.0 keystone auth to handle case where multiple services are
-    returned via the service catalog (compute, images, etc.)
+Wed May 23 2012 Marios Andreou <marios@redhat.com> - 1.0.0
+ - initial checkin of merged code - rackspace/ruby-cloudfiles and rackspace/ruby-openstack-compute
