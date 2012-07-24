@@ -203,7 +203,7 @@ module Compute
       data = JSON.generate(:createImage => options)
       response = @connection.req('POST', "/servers/#{@id}/action", :data => data)
       OpenStack::Compute::Exception.raise_exception(response) unless response.code.match(/^20.$/)
-      image_id = response["Location"].scan(/.*\/(.*)/).flatten
+      image_id = response["Location"].scan(/.*\/(.*)/).flatten[0]
       OpenStack::Compute::Image.new(@connection, image_id)
     end
     

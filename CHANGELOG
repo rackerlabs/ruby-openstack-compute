@@ -1,3 +1,6 @@
+* Mon Jul 23 2012 Dan Prince <dprince@redhat.com> - 1.1.10
+  - Ruby 1.9.3 fix. Use flatten[0] to obtain the correct image UUID.
+
 * Tue Jun 12 2012 Dan Prince <dprince@redhat.com> - 1.1.9
   - Make the metadata methods work with Ruby 1.9.
   - Added created and updated to Server.
