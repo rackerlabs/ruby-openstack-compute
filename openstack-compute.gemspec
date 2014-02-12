@@ -12,6 +12,13 @@ Gem::Specification.new do |s|
   s.date = %q{2011-10-28}
   s.description = %q{API Binding for OpenStack Compute}
   s.email = %q{dan.prince@rackspace.com}
+  s.post_install_message = %Q{
+**** PLEASE NOTE **********************************************************************************************
+
+  #{s.name} has been deprecated. Please consider using fog (http://github.com/fog/fog) for all new projects.
+
+***************************************************************************************************************
+} if s.respond_to? :post_install_message
   s.extra_rdoc_files = [
     "README.rdoc"
   ]

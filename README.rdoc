@@ -1,5 +1,9 @@
 = Ruby OpenStack Compute
 
+== Deprecation Notice
+
+This project is deprecated. New projects should use fog[https://github.com/fog/fog] instead.
+
 == Description
 
 Ruby Openstack Compute binding for the v1.0 OSAPI.

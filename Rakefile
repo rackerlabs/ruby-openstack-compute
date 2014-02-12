@@ -16,6 +16,13 @@ begin
     gemspec.files << "README.rdoc"
     gemspec.files << "VERSION"
     gemspec.files << "COPYING"
+    gemspec.post_install_message = %Q{
+**** PLEASE NOTE **********************************************************************************************
+
+  #{gemspec.name} has been deprecated. Please consider using fog (http://github.com/fog/fog) for all new projects.
+
+***************************************************************************************************************
+} if gemspec.respond_to? :post_install_message
   end
 rescue LoadError
   puts "Jeweler not available. Install it with: sudo gem install jeweler"
